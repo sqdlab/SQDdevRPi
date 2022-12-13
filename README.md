@@ -1,0 +1,1 @@
+This Repo hosts all scripts that are run on an RPi in order to interface with the SQDToolz stack on a centralised computer.
