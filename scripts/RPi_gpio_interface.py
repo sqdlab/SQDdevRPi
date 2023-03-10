@@ -88,4 +88,7 @@ if __name__ == "__main__" :
             print(handle_input(device))
     except Exception as e:
         print(e)
-        GPIO.cleanup()
+        #This will reset the pins - e.g. I2C pins will become open-drain instead of GPIOs. Thus, the output state can fluctuate
+        #and cause chaos on connected peripherals. So keep the pins on GPIO mode with their current output states remaining. It
+        #does not seem to cause access conflicts as the script will have terminated by this point...
+        # GPIO.cleanup()
