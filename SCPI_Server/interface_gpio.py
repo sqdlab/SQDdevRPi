@@ -120,10 +120,25 @@ class PiGPIO(SCPIBase):
             PiGPIO.Pin(23, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(24, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(25, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
-            PiGPIO.Pin(26, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO')
+            PiGPIO.Pin(26, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            None,
+            None,
+            PiGPIO.Pin(29, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(30, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
+            PiGPIO.Pin(31, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(32, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(32, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(33, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(34, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
+            PiGPIO.Pin(35, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(36, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(37, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(38, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(39, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
+            PiGPIO.Pin(40, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO')
         ]
         # add commands to the SCPI parser
-        nch = 26
+        nch = 40
         self.add_command('GPIO:MEASure:DIGital:DATA', getter=self.read_pin_value, channels=(None,None,None,nch))
         self.add_command('GPIO:MEASure:DIGital:PULL', getter=self.get_pin_pullupdown, setter=self.set_pin_pullupdown, channels=(None,None,None,nch))
         self.add_command('GPIO:SOURce:DIGital:DATA', getter=self.get_pin_value, setter=self.set_pin_value, channels=(None,None,None,nch))
