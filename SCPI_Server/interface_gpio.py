@@ -92,50 +92,36 @@ class PiGPIO(SCPIBase):
     def __init__(self):
         super(PiGPIO, self).__init__()
         # set pin numbering to 'board', reset all pins to their default values
-        GPIO.setmode(GPIO.BOARD)
-        self._pins = [
+        GPIO.setmode(GPIO.BCM)
+        self._gpio_ids = [
             None, # pin counting starts from 1
-            PiGPIO.Pin(1, GPIO.OUT, True, GPIO.PUD_UP, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='3V3 supply'),
-            PiGPIO.Pin(2, GPIO.OUT, True, GPIO.PUD_UP, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='5V supply'),
-            PiGPIO.Pin(3, GPIO.OUT, False, GPIO.PUD_UP, pud_fix=True, description='I2C_SDA'),
-            PiGPIO.Pin(4, GPIO.OUT, True, GPIO.PUD_UP, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='5V supply'),
-            PiGPIO.Pin(5, GPIO.OUT, False, GPIO.PUD_UP, pud_fix=True, description='I2C_SCL'),
-            PiGPIO.Pin(6, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
+            None, # pin counting starts from 2
+            PiGPIO.Pin(2, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(3, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(4, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(5, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
+            PiGPIO.Pin(6, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(7, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(8, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(9, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
+            PiGPIO.Pin(9, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(10, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(11, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(12, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(13, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(14, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
+            PiGPIO.Pin(14, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(15, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(16, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(17, GPIO.OUT, True, GPIO.PUD_UP, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='3V3 supply'),
+            PiGPIO.Pin(17, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(18, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(19, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(20, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
+            PiGPIO.Pin(20, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(21, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(22, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(23, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(24, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(25, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
+            PiGPIO.Pin(25, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
             PiGPIO.Pin(26, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(27, GPIO.OUT, False, GPIO.PUD_UP, pud_fix=True, description='ID_SD'),
-            PiGPIO.Pin(28, GPIO.OUT, False, GPIO.PUD_UP, pud_fix=True, description='ID_SC'),
-            PiGPIO.Pin(29, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(30, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
-            PiGPIO.Pin(31, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(32, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(32, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(33, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(34, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
-            PiGPIO.Pin(35, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(36, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(37, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(38, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(39, GPIO.OUT, False, GPIO.PUD_DOWN, setup=False, mode_fix=True, val_fix=True, pud_fix=True, description='GND'),
-            PiGPIO.Pin(40, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO')
+            PiGPIO.Pin(27, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO')
         ]
         # add commands to the SCPI parser
         nch = 40
@@ -157,7 +143,7 @@ class PiGPIO(SCPIBase):
         '''
             control pull-up and pull-down resistors of a pin
         '''
-        pin = self._pins[channels[-1]]
+        pin = self._gpio_ids[channels[-1]]
         pud_map = {'UP': GPIO.PUD_UP, 'DOWN': GPIO.PUD_DOWN, 'NONE': GPIO.PUD_OFF}
         pud = self._check_arg('PULL', value, pud_map)
         try:
@@ -169,7 +155,7 @@ class PiGPIO(SCPIBase):
         '''
             retrieve setting of the pull-up and pull-down resistors of a pin
         '''
-        pin = self._pins[channels[-1]]
+        pin = self._gpio_ids[channels[-1]]
         pud_map = {GPIO.PUD_UP: 'UP', GPIO.PUD_DOWN: 'DOWN', GPIO.PUD_OFF: 'NONE'}
         return pud_map[pin.pud]
 
@@ -177,7 +163,7 @@ class PiGPIO(SCPIBase):
         '''
             switch pin between input and output
         '''
-        pin = self._pins[channels[-1]]
+        pin = self._gpio_ids[channels[-1]]
         mode_map = {'IN': GPIO.IN, 'OUT': GPIO.OUT}
         mode = self._check_arg('direction', value, mode_map)
         try:
@@ -189,7 +175,7 @@ class PiGPIO(SCPIBase):
         '''
             return direction setting of a pin
         '''
-        pin = self._pins[channels[-1]]
+        pin = self._gpio_ids[channels[-1]]
         mode_map = {GPIO.IN: 'IN', GPIO.OUT: 'OUT', GPIO.I2C: 'I2C', GPIO.PWM: 'PWM', GPIO.SERIAL: 'SERIAL'}
         return mode_map[pin.mode]
 
@@ -197,7 +183,7 @@ class PiGPIO(SCPIBase):
         '''
             read pin state
         '''
-        pin = self._pins[channels[-1]]
+        pin = self._gpio_ids[channels[-1]]
         return pin.get_val() 
         
     
@@ -205,14 +191,14 @@ class PiGPIO(SCPIBase):
         '''
             return last set pin state
         '''
-        pin = self._pins[channels[-1]]
+        pin = self._gpio_ids[channels[-1]]
         return pin.val 
     
     def set_pin_value(self, value, channels):
         '''
             write pin state
         '''
-        pin = self._pins[channels[-1]]
+        pin = self._gpio_ids[channels[-1]]
         value_map = {'0': False, '1': True, 'LOW': False, 'HIGH': True, 'FALSE': False, 'TRUE': True}
         value = self._check_arg('DATA', value, value_map)
         try:
@@ -224,7 +210,7 @@ class PiGPIO(SCPIBase):
         '''
             pulse pin from current value to target value and return to current value after a set delay
         '''
-        pin = self._pins[channels[-1]]
+        pin = self._gpio_ids[channels[-1]]
         value_map = {'0': False, '1': True, 'LOW': False, 'HIGH': True, 'FALSE': False, 'TRUE': True}
         value = self._check_arg('DATA', value, value_map)
         DELAY_CORRECTION = -190e-6
