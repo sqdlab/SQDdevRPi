@@ -145,7 +145,7 @@ class PiGPIO(SCPIBase):
         #Don't include path in CSV
         file_path = f'~/Music/{file_name}.csv'
         if os.path.exists(file_path):
-            os.system(f'python buzzer {pwm_channel} {file_path}')
+            os.system(f'python buzzer.py {pwm_channel} {file_path}')
 
     def set_pin_pullupdown(self, value, channels):
         '''
