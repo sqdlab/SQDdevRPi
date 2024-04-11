@@ -3,6 +3,7 @@
 #Modified by Prasanna Pakkiam to make it compatible with Python3 and the new Raspberry Pi OS
 
 import time
+import os
 
 from scpi_base import SCPIBase
 from scpi_event import SCPIDeviceError, SCPIQueryError
@@ -130,6 +131,7 @@ class PiGPIO(SCPIBase):
         self.add_command('GPIO:SOURce:DIGital:DATA', getter=self.get_pin_value, setter=self.set_pin_value, channels=(None,None,None,nch))
         self.add_command('GPIO:SOURce:DIGital:IO', getter=self.get_pin_direction, setter=self.set_pin_direction, channels=(None,None,None,nch))
         self.add_command('GPIO:SOURce:DIGital:PULSe', setter=self.pulse_pin_value, channels=(None,None,None,nch))
+        self.add_command('GPIO:BUZZ', setter=self.buzz)
 
     def _check_arg(self, info, value, options):
         if isinstance(value, str):
@@ -138,6 +140,12 @@ class PiGPIO(SCPIBase):
             raise SCPIQueryError(info='%s must be one of [%s].'%(info, ', '.join([str(o) for o in options])))
         if isinstance(options, dict):
             return options[value]
+
+    def buzz(self, pwm_channel, file_name):
+        #Don't include path in CSV
+        file_path = f'~/Music/{file_name}.csv'
+        if os.path.exists(file_path):
+            os.system(f'python buzzer {pwm_channel} {file_path}')
 
     def set_pin_pullupdown(self, value, channels):
         '''

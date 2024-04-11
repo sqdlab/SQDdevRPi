@@ -4,6 +4,7 @@
 
 from interface_gpio import PiGPIO
 from socketserver import TCPServer, BaseRequestHandler
+import os
 
 class PiGPIOHandler(BaseRequestHandler):
     hGPIO = PiGPIO()
@@ -45,5 +46,9 @@ if __name__ == '__main__':
     # start server on all interfaces, port 4000
     HOST = ''
     PORT = 4000
+
+    if os.path.exists('~/Music/Z0.csv'):
+        os.system('python buzzer 13 Z0.csv')
+
     server = TCPServer((HOST, PORT), PiGPIOHandler)
     server.serve_forever()
