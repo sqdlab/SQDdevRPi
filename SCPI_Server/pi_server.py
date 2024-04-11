@@ -53,7 +53,7 @@ if __name__ == '__main__':
         file_path = f'{tune_folder}/intro.csv'
         if os.path.exists(file_path):
             os.system(f'python {os.path.dirname(os.path.realpath(__file__))}/buzzer.py 13 {file_path}')
-        PiGPIOHandler.tunes_path = tune_folder
+        PiGPIO.tunes_path = tune_folder
 
     server = TCPServer((HOST, PORT), PiGPIOHandler)
     server.serve_forever()
