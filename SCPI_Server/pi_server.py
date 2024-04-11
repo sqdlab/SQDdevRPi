@@ -47,8 +47,9 @@ if __name__ == '__main__':
     HOST = ''
     PORT = 4000
 
-    if os.path.exists('~/Music/Z0.csv'):
-        os.system('python buzzer.py 13 ~/Music/Z0.csv')
+    file_path = os.path.expanduser(f'~/Music/intro.csv')
+    if os.path.exists(file_path):
+        os.system(f'python {os.getcwd()}/buzzer.py 13 {file_path}')
 
     server = TCPServer((HOST, PORT), PiGPIOHandler)
     server.serve_forever()
