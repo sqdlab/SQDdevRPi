@@ -48,7 +48,7 @@ if __name__ == '__main__':
     HOST = ''
     PORT = 4000
 
-    if len(sys.argv) > 0:
+    if len(sys.argv) > 1:
         tune_folder = sys.argv[1]
         file_path = f'{tune_folder}/intro.csv'
         if os.path.exists(file_path):

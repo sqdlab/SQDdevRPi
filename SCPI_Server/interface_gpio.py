@@ -144,7 +144,7 @@ class PiGPIO(SCPIBase):
 
     def buzz(self, pwm_channel, file_name):
         #Don't include path in CSV
-        file_path = f'{PiGPIO.tunes_path}{file_name}.csv'
+        file_path = f'{PiGPIO.tunes_path}/{file_name}.csv'
         if os.path.exists(file_path):
             os.system(f'python {os.path.dirname(os.path.realpath(__file__))}/buzzer.py {pwm_channel} {file_path}')
 
