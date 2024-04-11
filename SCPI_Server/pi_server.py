@@ -5,6 +5,7 @@
 from interface_gpio import PiGPIO
 from socketserver import TCPServer, BaseRequestHandler
 import os
+import subprocess
 import sys
 
 class PiGPIOHandler(BaseRequestHandler):
@@ -52,7 +53,7 @@ if __name__ == '__main__':
         tune_folder = sys.argv[1]
         file_path = f'{tune_folder}/intro.csv'
         if os.path.exists(file_path):
-            os.system(f'python {os.path.dirname(os.path.realpath(__file__))}/buzzer.py 13 {file_path}')
+            subprocess.Popen([f'python', f'{os.path.dirname(os.path.realpath(__file__))}/buzzer.py', '13', file_path])
         PiGPIO.tunes_path = tune_folder
 
     server = TCPServer((HOST, PORT), PiGPIOHandler)

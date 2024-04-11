@@ -4,6 +4,7 @@
 
 import time
 import os
+import subprocess
 
 from scpi_base import SCPIBase
 from scpi_event import SCPIDeviceError, SCPIQueryError
@@ -146,7 +147,7 @@ class PiGPIO(SCPIBase):
         #Don't include path in CSV
         file_path = f'{PiGPIO.tunes_path}/{file_name}.csv'
         if os.path.exists(file_path):
-            os.system(f'python {os.path.dirname(os.path.realpath(__file__))}/buzzer.py {pwm_channel} {file_path}')
+            subprocess.Popen([f'python', f'{os.path.dirname(os.path.realpath(__file__))}/buzzer.py', str(pwm_channel), file_path])
 
     def set_pin_pullupdown(self, value, channels):
         '''
