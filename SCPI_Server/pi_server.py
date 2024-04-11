@@ -5,6 +5,7 @@
 from interface_gpio import PiGPIO
 from socketserver import TCPServer, BaseRequestHandler
 import os
+import sys
 
 class PiGPIOHandler(BaseRequestHandler):
     hGPIO = PiGPIO()
@@ -47,9 +48,12 @@ if __name__ == '__main__':
     HOST = ''
     PORT = 4000
 
-    file_path = os.path.expanduser(f'~/Music/intro.csv')
-    if os.path.exists(file_path):
-        os.system(f'python {os.getcwd()}/buzzer.py 13 {file_path}')
+    if len(sys.argv) > 0:
+        tune_folder = sys.argv[1]
+        file_path = f'{tune_folder}/intro.csv'
+        if os.path.exists(file_path):
+            os.system(f'python {os.path.dirname(os.path.realpath(__file__))}/buzzer.py 13 {file_path}')
+        PiGPIOHandler.tunes_path = tune_folder
 
     server = TCPServer((HOST, PORT), PiGPIOHandler)
     server.serve_forever()

@@ -15,6 +15,7 @@ def dict_from_strings(strings):
 
 class PiGPIO(SCPIBase):    
     _REVISION = 1
+    tunes_path = ''
     
     class Pin:
         def __init__(self, gpio, mode_rst, val_rst, pud_rst, setup = True, mode_fix = False, val_fix = False, pud_fix = False, description = None):
@@ -143,9 +144,9 @@ class PiGPIO(SCPIBase):
 
     def buzz(self, pwm_channel, file_name):
         #Don't include path in CSV
-        file_path = os.path.expanduser(f'~/Music/{file_name}.csv')
+        file_path = f'{PiGPIO.tunes_path}{file_name}.csv'
         if os.path.exists(file_path):
-            os.system(f'python {os.getcwd()}/buzzer.py {pwm_channel} {file_path}')
+            os.system(f'python {os.path.dirname(os.path.realpath(__file__))}/buzzer.py {pwm_channel} {file_path}')
 
     def set_pin_pullupdown(self, value, channels):
         '''
