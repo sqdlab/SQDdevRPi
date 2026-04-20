@@ -1,15 +1,21 @@
 #Original author: Markus Jerger
 #Created approximately: 29/09/2014
 #Modified by Prasanna Pakkiam to make it compatible with Python3 and the new Raspberry Pi OS
+#Modified by Stephen Fowler to add USB compatibility: 07/02/2025
 
+# sudo lsof -t -i:4000 | xargs sudo kill -9
+      
 from interface_gpio import PiGPIO
 from socketserver import TCPServer, BaseRequestHandler
 import os
 import subprocess
 import sys
 
-class PiGPIOHandler(BaseRequestHandler):
+from interface_usb import PiUSB
+class PiUSBandGPIOHandler(BaseRequestHandler):
     hGPIO = PiGPIO()
+    hUSB = PiUSB(debugging=True)
+
     
     def splitter(self, request, separators = ['\r\n', '\n']):
         ''' split data received from a socket into lines '''
@@ -22,7 +28,7 @@ class PiGPIOHandler(BaseRequestHandler):
                 # any unterminated lines in data are ignored
                 return
             data = data + data_block.decode()
-            # yield a line if one of the separators was found
+            # yield a line if one of the separators was found\n #test
             # assumes that line separators do not change
             for separator in separators:
                 while True:
@@ -34,18 +40,27 @@ class PiGPIOHandler(BaseRequestHandler):
                         data = data[(idx+len(separator)):]
         
     def handle(self):
-        ''' pass requests to PiGPIO to handle '''
+        ''' pass requests to PiUSB PiGPIO to handle '''
+        print("request passed to handler:" , self.request)
         lines = self.splitter(self.request)
         for line, separator in lines:
             head = line.split(':')[0]
             #Let the GPIO handler take care of general * commands and GPIO: commands...
-            if head == 'GPIO' or line[0] == '*':
-                result = PiGPIOHandler.hGPIO.process(line)
+            if head == 'USB':
+                result = PiUSBandGPIOHandler.hUSB.process(line)
+                if result:
+                    self.request.send((';'.join(result)+separator).encode())
+                    print("handled ran")
+            elif head == 'GPIO' or line[0] == '*':
+                result = PiUSBandGPIOHandler.hGPIO.process(line)
                 if result:
                     self.request.send((';'.join(result)+separator).encode())
     
 if __name__ == '__main__':
-    # start server on all interfaces, port 4000
+    # If recieving a OSError: [Errno 98] Address already in use after restarting the program:
+    #                       1. Ensure both host and client have stopped running.
+    #                       2. On Pi, enter:    sudo lsof -t -i:4000 | xargs sudo kill -9
+
     HOST = ''
     PORT = 4000
 
@@ -56,5 +71,6 @@ if __name__ == '__main__':
             subprocess.Popen([f'python', f'{os.path.dirname(os.path.realpath(__file__))}/buzzer.py', '13', file_path])
         PiGPIO.tunes_path = tune_folder
 
-    server = TCPServer((HOST, PORT), PiGPIOHandler)
-    server.serve_forever()
+
+    with TCPServer((HOST, PORT), PiUSBandGPIOHandler) as server:
+        server.serve_forever()

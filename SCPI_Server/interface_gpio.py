@@ -96,36 +96,11 @@ class PiGPIO(SCPIBase):
         super(PiGPIO, self).__init__()
         # set pin numbering to 'board', reset all pins to their default values
         GPIO.setmode(GPIO.BCM)
-        self._gpio_ids = [
-            None, # pin counting starts from 1
-            None, # pin counting starts from 2
-            PiGPIO.Pin(2, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(3, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(4, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(5, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(6, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(7, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(8, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(9, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(10, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(11, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(12, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(13, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(14, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(15, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(16, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(17, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(18, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(19, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(20, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(21, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(22, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(23, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(24, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(25, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(26, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO'),
-            PiGPIO.Pin(27, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO')
-        ]
+
+        # pin counting starts from 2, so the first 2 elements of this list are None.
+        num_pins = 28 
+        self._gpio_ids = [None, None] + [PiGPIO.Pin(n, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO') for n in range(2, num_pins)]
+        
         # add commands to the SCPI parser
         nch = 40
         self.add_command('GPIO:MEASure:DIGital:DATA', getter=self.read_pin_value, channels=(None,None,None,nch))
@@ -259,6 +234,8 @@ class PiGPIO(SCPIBase):
         '''
         pass
     
+    def raw_input():
+        pass
     
 if __name__ == '__main__':
     pi = PiGPIO()
