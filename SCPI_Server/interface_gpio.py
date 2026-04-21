@@ -220,7 +220,7 @@ class PiGPIO(SCPIBase):
             raise SCPIDeviceError(info = err)
     
     def set_sr_pins(self, data, clk, lat):
-        self._sr_pins_dat_clk_lat = data, clk, lat
+        self._sr_pins_dat_clk_lat = int(data), int(clk), int(lat)
 
     def get_sr_pins(self):
         return self._sr_pins_dat_clk_lat
