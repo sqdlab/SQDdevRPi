@@ -228,20 +228,20 @@ class PiGPIO(SCPIBase):
     def set_sr_clk_byte(self, byte):
         bits = [(byte >> i) & 1 for i in range(7, -1, -1)]
         data, clk, lat = self._sr_pins_dat_clk_lat
-        self._gpio_ids[lat].set_val(0)
-        self._gpio_ids[clk].set_val(0)
+        self._gpio_ids[lat].set_val(False)
+        self._gpio_ids[clk].set_val(False)
         for m in range(8):
-            self._gpio_ids[data].set_val(bits[m])
-            self._gpio_ids[clk].set_val(0)
+            self._gpio_ids[data].set_val(bits[m]==1)
+            self._gpio_ids[clk].set_val(False)
             time.sleep(1e-6)
-            self._gpio_ids[clk].set_val(1)
+            self._gpio_ids[clk].set_val(True)
             time.sleep(1e-6)
 
     def latch_sr(self):
         data, clk, lat = self._sr_pins_dat_clk_lat
-        self._gpio_ids[lat].set_val(1)
+        self._gpio_ids[lat].set_val(True)
         time.sleep(1e-6)
-        self._gpio_ids[lat].set_val(0)
+        self._gpio_ids[lat].set_val(False)
         time.sleep(1e-6)
 
 
