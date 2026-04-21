@@ -226,6 +226,7 @@ class PiGPIO(SCPIBase):
         return self._sr_pins_dat_clk_lat
 
     def set_sr_clk_byte(self, byte):
+        byte = int(byte)
         bits = [(byte >> i) & 1 for i in range(7, -1, -1)]
         data, clk, lat = self._sr_pins_dat_clk_lat
         self._gpio_ids[lat].set_val(False)
