@@ -231,7 +231,7 @@ class PiGPIO(SCPIBase):
         data, clk, lat = self._sr_pins_dat_clk_lat
         self._gpio_ids[lat].set_val(False)
         self._gpio_ids[clk].set_val(False)
-        for m in range(8):
+        for m in range(7,-1,-1):
             self._gpio_ids[data].set_val(bits[m]==1)
             self._gpio_ids[clk].set_val(False)
             time.sleep(1e-6)

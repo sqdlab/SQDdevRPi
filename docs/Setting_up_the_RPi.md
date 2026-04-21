@@ -51,4 +51,4 @@ Note that certain multipurpose GPIO pins like the RX-UART pin will require furth
 sudo raspi-config
 ```
 
-Then follow the instructions to disable features such as UART on startup.
+Then follow the instructions to disable features (such as UART for GPIO14/15, 1-Wire for GPIO4 etc.) on startup.
