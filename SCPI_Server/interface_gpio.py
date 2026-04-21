@@ -101,6 +101,9 @@ class PiGPIO(SCPIBase):
         num_pins = 28 
         self._gpio_ids = [None, None] + [PiGPIO.Pin(n, GPIO.OUT, False, GPIO.PUD_OFF, description='GPIO') for n in range(2, num_pins)]
         
+        #Shift-Register functionality
+        self._sr_pins_dat_clk_lat = 4,17,18
+
         # add commands to the SCPI parser
         nch = 40
         self.add_command('GPIO:MEASure:DIGital:DATA', getter=self.read_pin_value, channels=(None,None,None,nch))
@@ -108,6 +111,9 @@ class PiGPIO(SCPIBase):
         self.add_command('GPIO:SOURce:DIGital:DATA', getter=self.get_pin_value, setter=self.set_pin_value, channels=(None,None,None,nch))
         self.add_command('GPIO:SOURce:DIGital:IO', getter=self.get_pin_direction, setter=self.set_pin_direction, channels=(None,None,None,nch))
         self.add_command('GPIO:SOURce:DIGital:PULSe', setter=self.pulse_pin_value, channels=(None,None,None,nch))
+        self.add_command('GPIO:SReg:PINS', getter=self.get_sr_pins, setter=self.set_sr_pins)
+        self.add_command('GPIO:SReg:LOAD', setter=self.set_sr_clk_byte)
+        self.add_command('GPIO:SReg:LATch', setter=self.latch_sr)
         self.add_command('GPIO:BUZZ', setter=self.buzz)
 
     def _check_arg(self, info, value, options):
@@ -212,7 +218,32 @@ class PiGPIO(SCPIBase):
             pin.set_val(cur)
         except ValueError as err:
             raise SCPIDeviceError(info = err)
-        
+    
+    def set_sr_pins(self, data, clk, lat):
+        self._sr_pins_dat_clk_lat = data, clk, lat
+
+    def get_sr_pins(self):
+        return self._sr_pins_dat_clk_lat
+
+    def set_sr_clk_byte(self, byte):
+        bits = [(num >> i) & 1 for i in range(7, -1, -1)]
+        data, clk, lat = self._sr_pins_dat_clk_lat
+        self._gpio_ids[lat].set_val(0)
+        self._gpio_ids[clk].set_val(0)
+        for m in range(8):
+            self._gpio_ids[data].set_val(bits[m])
+            self._gpio_ids[clk].set_val(0)
+            time.sleep(1e-6)
+            self._gpio_ids[clk].set_val(1)
+            time.sleep(1e-6)
+
+    def latch_sr(self):
+        data, clk, lat = self._sr_pins_dat_clk_lat
+        self._gpio_ids[lat].set_val(1)
+        time.sleep(1e-6)
+        self._gpio_ids[lat].set_val(0)
+        time.sleep(1e-6)
+
 
     def get_serial(self):
         serial = '?'
