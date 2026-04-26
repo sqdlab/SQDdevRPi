@@ -237,6 +237,7 @@ class PiGPIO(SCPIBase):
             time.sleep(1e-6)
             self._gpio_ids[clk].set_val(True)
             time.sleep(1e-6)
+        self._gpio_ids[clk].set_val(False)
 
     def latch_sr(self):
         data, clk, lat = self._sr_pins_dat_clk_lat
